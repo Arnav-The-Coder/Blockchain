@@ -1,10 +1,14 @@
 import Debug "mo:base/Debug";
 
 actor DBank {
-  var currentValue: Nat = 300;
+
+  // This changes the persistences of the variable from flexible (default) to stable
+  // It will go back to its last value even after being refreshed or updated, not to it's orginal variable value
+
+  stable var currentValue: Nat = 300;
 
   // Changes the value of the variable
-  currentValue := 100;
+  // currentValue := 100;
 
   let id = 2430957293847524;
   // Debug.print(debug_show(id));
