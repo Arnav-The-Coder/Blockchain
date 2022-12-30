@@ -17,8 +17,16 @@ actor DBank {
     Debug.print(debug_show(currentValue));
   };
 
+  // Creates a function that is not private and can be seen by the program
+
   public func withdraw(amount: Nat) {
-    currentValue -= amount;
-    Debug.print(debug_show(currentValue));
+    let tempValue: Int = currentValue - amount;
+
+    if (tempValue >= 0) {
+      currentValue -= amount;
+      Debug.print(debug_show(currentValue));
+    } else {
+      Debug.print("The amount is too large, now the currentValue is less than zero.");
+    }
   };
 }
