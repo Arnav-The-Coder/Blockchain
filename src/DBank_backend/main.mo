@@ -1,19 +1,26 @@
 import Debug "mo:base/Debug";
+import Time "mo:base/Time";
+import Float "mo:base/Float";
 
 actor DBank {
-
   // This changes the persistences of the variable from flexible (default) to stable
   // It will go back to its last value even after being refreshed or updated, not to it's orginal variable value
 
-  stable var currentValue: Nat = 300;
+  stable var currentValue: Float = 300;
 
   // Changes the value of the variable
-  // currentValue := 100;
+  // currentValue := 300;
+
+  // Displays number of nanoseconds since 1970, January 1
+
+  stable var startTime = Time.now();
+  // startTime := Time.now();
+  Debug.print(debug_show(startTime));
 
   let id = 2430957293847524;
   // Debug.print(debug_show(id));
 
-  public func topUp(amount: Nat) {
+  public func topUp(amount: Float) {
     currentValue += amount;
 
   // Prints a Natural Number
@@ -23,8 +30,8 @@ actor DBank {
 
   // Creates a function that is not private and can be seen by the program
 
-  public func withdraw(amount: Nat) {
-    let tempValue: Int = currentValue - amount;
+  public func withdraw(amount: Float) {
+    let tempValue: Float = currentValue - amount;
 
     if (tempValue >= 0) {
       currentValue -= amount;
@@ -34,9 +41,19 @@ actor DBank {
     }
   };
 
-  public query func checkBalance(): async Nat {
+  public query func checkBalance(): async Float {
     return currentValue;
   }; 
 
   // topUp();
+
+  public func compound() {
+    let currentTime = Time.now();
+    let timeElapsedNS = currentTime - startTime;
+    let timeElapsedS = timeElapsedNS / 1000000000;
+
+    // Hard to convert Nat to Float, so change everything else to a float to avoid difficulties
+    currentValue := currentValue * (1.01 ** Float.fromInt(timeElapsedS));
+    startTime := currentTime;
+  };
 }
